@@ -1,0 +1,9 @@
+--- Final Graph Structure ---
+HeteroData(
+  playlist={ num_nodes=1000000 },
+  artist={ num_nodes=24205 },
+  track={ x=[188298, 15] },
+  (playlist, contains, track)={ edge_index=[2, 19616384] },
+  (track, by, artist)={ edge_index=[2, 188298] }
+)
+Track features shape: torch.Size([188298, 15])
