@@ -7,3 +7,63 @@ HeteroData(
   (track, by, artist)={ edge_index=[2, 188298] }
 )
 Track features shape: torch.Size([188298, 15])
+
+Here's a breakdown of the graph layout.
+
+This graph is a heterogeneous graph, meaning it has different types of nodes and edges. It's designed to capture the relationships between playlists, songs, and artists.
+
+1. 📊 Node Types (The "What")
+
+You have three distinct types of nodes:
+
+    playlist:
+
+        Quantity: 1,000,000 (one for each playlist in the dataset).
+
+        Features: None. These nodes are "blank slates." Your Exphormer model will learn a unique numerical vector (an embedding) for each playlist based on its connections.
+
+    track:
+
+        Quantity: This is the number of unique tracks that were successfully matched between the two datasets (e.g., ~1 million, but not all 2.2M tracks from the playlist set will be in the feature set).
+
+        Features: Yes (This is the most important part). Each track node has a vector of 15 numerical features (e.g., [danceability, energy, key, loudness, ...] ) that you extracted and normalized from the CSV.
+
+    artist:
+
+        Quantity: The number of unique artists found in the dataset.
+
+        Features: None. Just like playlists, the model will learn an embedding for each artist based on the tracks they're connected to.
+
+2. 🔗 Edge Types (The "How")
+
+You have two types of directed edges that connect the nodes.
+
+    ('playlist', 'contains', 'track'):
+
+        What it is: A directed edge from a playlist node to a track node.
+
+        Meaning: "This playlist includes this song."
+
+        Example: An edge from Playlist 7 → Track 'spotify:track:123abc'.
+
+    ('track', 'by', 'artist'):
+
+        What it is: A directed edge from a track node to an artist node.
+
+        Meaning: "This track was made by this artist."
+
+        Example: An edge from Track 'spotify:track:123abc' → Artist 'spotify:artist:456xyz'.
+
+3. ⚖️ The "Weights" (The "How Much")
+
+This is a key point: your graph edges are unweighted.
+
+Your teammates' idea was about pre-calculating edge weights (e.g., weight=0.75). We are not doing that.
+
+Instead, the "intelligence" of the graph comes from two places:
+
+    The Rich Node Features: The Exphormer model will look at the 15 features on a track node to understand what kind of song it is.
+
+    TheLearned Embeddings: The model learns the "weight" or "importance" of connections during training. It will learn that a track node with high danceability is a "stronger" or "better" connection for a playlist that is full of other high danceability tracks.
+
+The model learns the weights dynamically, which is far more powerful than assigning static weights ourselves.
