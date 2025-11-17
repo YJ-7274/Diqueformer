@@ -18,7 +18,7 @@ FEATURES_DATASET = "amitanshjoshi/spotify-1million-tracks"
 PLAYLIST_DATASET = "himanshuwagh/spotify-million"
 
 # 3. Path to save the final graph file
-OUTPUT_FILE = "spotify_combined_graph.pt"
+OUTPUT_FILE = "spotify_combined_graph_local.pt"
 # -------------------------------------------------------------------
 
 def load_track_feature_store(dataset_handle):
